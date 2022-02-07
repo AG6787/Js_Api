@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr-FR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Test WebService</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css">
+</head>
+
+<body>
+    <main role="main">
+
+        <section class="jumbotron text-center">
+            <div class="container">
+                <h1 class="jumbotron-heading">Album example</h1>
+                <p class="lead text-muted">Something short and leading about the collection below—its contents, the
+                    creator, etc. Make it short and sweet, but not too short so folks don't simply skip over it
+                    entirely.</p>
+                <p>
+                    <a href="#" class="btn btn-primary my-2" id='popular'>Popular Films</a>
+                </p>
+            </div>
+            <p>
+                <input type="text" name="mySearchMovieInput" id="searchField" class="form-control col-6" style="margin: 0 auto;" placeholder="ex : breaking bad"/>
+                <a href="#" class="btn btn-primary my-2" id='loadMyElement'>Charger mes éléments</a>
+            </p>
+        </section>
+
+        <div class="album py-5 bg-light">
+            <div class="container">
+                <div class="row" id="display_result">
+
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
+    <script>
+        var results;
+        var base_url = "https://api.themoviedb.org/3"
+        var key = "89c22b4744b8d73fbdda3a7a3d3ae397"
+
+        function displayFilm(results) {
+            $(results).each(function () {
+                // console.log(this)
+                src_img = "https://image.tmdb.org/t/p/w500/" + this.backdrop_path
+                
+                $("#display_result").append(
+                    "<div class=\"card\" style=\"width: 23rem;\">" +
+                        "<div class=\"card-body\">" +
+                            "<img class=\"card-img-top\" src=\"" + src_img + "\"/>" +
+                            "<h5 class=\"card-title\">" + this.original_title + "</h5>" +
+                            "<p class=\"card-text\">" + this.overview + "</p>" +
+                        "</div>" +
+                    "</div>" 
+                )
+            });
+        }
+
+        // console.log(results)
+
+        $('#popular').click(function () {
+
+                $.ajax({
+                    method: "GET",
+                    url: base_url + "/movie/popular/?api_key=" + key
+                })
+                .done(function (response) {
+                    $("#display_result").empty()
+
+                    results = response.results;
+                    // console.log(results)
+                    displayFilm(results)
+                })
+
+        })
+
+        $('#loadMyElement').click(function () {
+            $.ajax({
+                    method: "GET",
+                    url: base_url + "/search/movie?api_key=" + key + "&query=" + $('#searchField').val(),
+                })
+                .done(function (response) {
+                    console.log(response)
+
+                    $("#display_result").empty()
+
+                    results = response.results;
+                    // console.log(results)
+                    displayFilm(results)
+                })
+        })
+       
+
+    </script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--  -->
